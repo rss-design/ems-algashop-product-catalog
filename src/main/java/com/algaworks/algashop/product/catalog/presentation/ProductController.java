@@ -3,6 +3,7 @@ package com.algaworks.algashop.product.catalog.presentation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -13,7 +14,7 @@ public class ProductController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ProductDetailOutput create(@RequestBody ProductInput input) {
+  public ProductDetailOutput create(@RequestBody @Valid ProductInput input) {
     return ProductDetailOutput.builder()
       .id(UUID.randomUUID())
       .addedAt(OffsetDateTime.now())
