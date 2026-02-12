@@ -1,5 +1,6 @@
 package com.algaworks.algashop.product.catalog.presentation;
 
+import com.algaworks.algashop.product.catalog.application.ResourceNotFoundException;
 import java.net.URI;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,6 +15,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -47,6 +49,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     problemDetail.setProperty("fields", fieldErrors);
 
     return super.handleExceptionInternal(ex, problemDetail, headers, status, request);
+  }
+
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ProblemDetail handleResourceNotFoundException(ResourceNotFoundException exception) {
+    ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatusCode.valueOf(404));
+    problemDetail.setTitle("Not found");
+    problemDetail.setDetail(exception.getMessage());
+    problemDetail.setType(URI.create("/errors/not-found"));
+    return problemDetail;
   }
 
 }
