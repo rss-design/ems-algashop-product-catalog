@@ -1,4 +1,4 @@
-package com.algaworks.algashop.product.catalog.presentation;
+package com.algaworks.algashop.product.catalog.application.product.query;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
