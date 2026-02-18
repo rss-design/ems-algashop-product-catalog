@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@Slf4j
 @AllArgsConstructor
 @RestControllerAdvice
+@Slf4j
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   private final MessageSource messageSource;
@@ -32,9 +33,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                                                                 HttpHeaders headers,
                                                                 HttpStatusCode status,
                                                                 WebRequest request) {
-
     ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-
     problemDetail.setTitle("Invalid fields");
     problemDetail.setDetail("One or more fields are invalid");
     problemDetail.setType(URI.create("/errors/invalid-fields"));
@@ -53,7 +52,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(ResourceNotFoundException.class)
   public ProblemDetail handleResourceNotFoundException(ResourceNotFoundException exception) {
-    ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatusCode.valueOf(404));
+    ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
     problemDetail.setTitle("Not found");
     problemDetail.setDetail(exception.getMessage());
     problemDetail.setType(URI.create("/errors/not-found"));

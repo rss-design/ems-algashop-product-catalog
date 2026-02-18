@@ -18,6 +18,7 @@ public class ProductInput {
 
   @NotBlank
   private String name;
+
   @NotBlank
   private String brand;
 

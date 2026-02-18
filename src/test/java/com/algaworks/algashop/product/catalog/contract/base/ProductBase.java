@@ -12,13 +12,13 @@ import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.UUID;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -38,6 +38,7 @@ public class ProductBase {
   public static final UUID validProductId = UUID.fromString("fffe6ec2-7103-48b3-8e4f-3b58e43fb75a");
   public static final UUID invalidProductId = UUID.fromString("21651a12-b126-4213-ac21-19f66ff4642e");
   public static final UUID createdProductId = UUID.fromString("f7c6843f-465c-476d-9a9b-4783bde4dc5e");
+  public static final UUID deletedNotFoundProductId = UUID.fromString("19c70e7-d858-7462-96f6-d8741729ec67");
 
   @BeforeEach
   void setUp() {
@@ -50,6 +51,8 @@ public class ProductBase {
     mockFilterProducts();
     mockCreateProduct();
     mockInvalidProductFindById();
+    mockDeleteProduct();
+    mockDeleteNotFoundProduct();
   }
 
   private void mockInvalidProductFindById() {
@@ -88,6 +91,16 @@ public class ProductBase {
   private void mockValidProductFindById() {
     Mockito.when(productQueryService.findById(validProductId))
       .thenReturn(ProductDetailOutputTestDataBuilder.aProduct().id(validProductId).build());
+  }
+
+  private void mockDeleteProduct() {
+    Mockito.doNothing().when(productManagementApplicationService).disable(any(UUID.class));
+  }
+
+  private void mockDeleteNotFoundProduct() {
+    Mockito.doThrow(new ResourceNotFoundException())
+      .when(productManagementApplicationService)
+      .disable(eq(deletedNotFoundProductId));
   }
 
 }
