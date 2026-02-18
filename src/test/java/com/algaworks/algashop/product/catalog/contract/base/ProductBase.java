@@ -38,6 +38,8 @@ public class ProductBase {
   public static final UUID validProductId = UUID.fromString("fffe6ec2-7103-48b3-8e4f-3b58e43fb75a");
   public static final UUID invalidProductId = UUID.fromString("21651a12-b126-4213-ac21-19f66ff4642e");
   public static final UUID createdProductId = UUID.fromString("f7c6843f-465c-476d-9a9b-4783bde4dc5e");
+  public static final UUID updatedProductId = UUID.fromString("019c714f-68a7-7bdc-9608-892941fc2f1e");
+  public static final UUID updatedNotFoundProductId = UUID.fromString("019c714f-68a7-7bdc-9608-892941fc2f1e");
   public static final UUID deletedNotFoundProductId = UUID.fromString("19c70e7-d858-7462-96f6-d8741729ec67");
 
   @BeforeEach
@@ -51,6 +53,8 @@ public class ProductBase {
     mockFilterProducts();
     mockCreateProduct();
     mockInvalidProductFindById();
+    mockUpdateProduct();
+    mockUpdateNotFoundProduct();
     mockDeleteProduct();
     mockDeleteNotFoundProduct();
   }
@@ -91,6 +95,20 @@ public class ProductBase {
   private void mockValidProductFindById() {
     Mockito.when(productQueryService.findById(validProductId))
       .thenReturn(ProductDetailOutputTestDataBuilder.aProduct().id(validProductId).build());
+  }
+
+  private void mockUpdateProduct() {
+    Mockito.doNothing().when(productManagementApplicationService)
+      .update(any(UUID.class), any(ProductInput.class));
+
+    Mockito.when(productQueryService.findById(updatedProductId))
+      .thenReturn(ProductDetailOutputTestDataBuilder.aProduct().id(updatedProductId).build());
+  }
+
+  private void mockUpdateNotFoundProduct() {
+    Mockito.doThrow(new ResourceNotFoundException())
+      .when(productManagementApplicationService)
+      .update(eq(updatedNotFoundProductId), any(ProductInput.class));
   }
 
   private void mockDeleteProduct() {
