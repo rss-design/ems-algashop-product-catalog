@@ -14,16 +14,25 @@ import java.util.List;
 import java.util.UUID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.operation.preprocess.Preprocessors;
+import org.springframework.restdocs.templates.TemplateFormats;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(ProductController.class)
+@ExtendWith(RestDocumentationExtension.class)
 public class ProductBase {
 
   @Autowired
@@ -43,9 +52,16 @@ public class ProductBase {
   public static final UUID deletedNotFoundProductId = UUID.fromString("19c70e7-d858-7462-96f6-d8741729ec67");
 
   @BeforeEach
-  void setUp() {
+  void setUp(RestDocumentationContextProvider documentationContextProvider) {
     RestAssuredMockMvc.mockMvc(MockMvcBuilders.webAppContextSetup(context)
-      .defaultResponseCharacterEncoding(StandardCharsets.UTF_8).build());
+      .apply(documentationConfiguration(documentationContextProvider)
+        .snippets().withTemplateFormat(TemplateFormats.asciidoctor())
+        .and().operationPreprocessors()
+        .withResponseDefaults(Preprocessors.prettyPrint()))
+      .alwaysDo(MockMvcRestDocumentation.document("{ClassName}/{methodName}"))
+      .defaultResponseCharacterEncoding(StandardCharsets.UTF_8)
+      .build()
+    );
 
     RestAssuredMockMvc.enableLoggingOfRequestAndResponseIfValidationFails();
 
