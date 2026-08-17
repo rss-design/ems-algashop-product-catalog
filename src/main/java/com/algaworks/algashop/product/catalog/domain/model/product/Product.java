@@ -4,6 +4,7 @@ import com.algaworks.algashop.product.catalog.domain.model.IdGenerator;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,7 +21,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "products")
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Product {
 
     @Id
@@ -45,7 +46,7 @@ public class Product {
     private Long version;
 
     @CreatedDate
-    private OffsetDateTime createdAt;
+    private OffsetDateTime addedAt;
 
     @LastModifiedDate
     private OffsetDateTime updatedAt;
