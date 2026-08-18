@@ -6,6 +6,7 @@ import com.algaworks.algashop.product.catalog.application.category.query.Categor
 import com.algaworks.algashop.product.catalog.application.category.query.CategoryQueryService;
 import com.algaworks.algashop.product.catalog.application.utility.Mapper;
 import com.algaworks.algashop.product.catalog.domain.model.category.Category;
+import com.algaworks.algashop.product.catalog.domain.model.category.CategoryNotFoundException;
 import com.algaworks.algashop.product.catalog.domain.model.category.CategoryRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class CategoryQueryServiceImpl implements CategoryQueryService {
   @Override
   public CategoryDetailOutput findById(UUID categoryId) {
     Category category = categoryRepository.findById(categoryId)
-      .orElseThrow(ResourceNotFoundException::new);
+      .orElseThrow(() -> new CategoryNotFoundException(categoryId));
     return mapper.convert(category, CategoryDetailOutput.class);
   }
 }

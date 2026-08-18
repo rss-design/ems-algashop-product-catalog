@@ -5,6 +5,7 @@ import com.algaworks.algashop.product.catalog.application.product.management.Pro
 import com.algaworks.algashop.product.catalog.application.PageModel;
 import com.algaworks.algashop.product.catalog.application.product.query.ProductDetailOutput;
 import com.algaworks.algashop.product.catalog.application.product.query.ProductQueryService;
+import com.algaworks.algashop.product.catalog.domain.model.category.CategoryNotFoundException;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,12 @@ public class ProductController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public ProductDetailOutput create(@RequestBody @Valid ProductInput input) {
-    UUID productId = productManagementApplicationService.create(input);
+    UUID productId;
+    try {
+      productId = productManagementApplicationService.create(input);
+    } catch (CategoryNotFoundException e) {
+      throw new UnprocessableContentException(e.getMessage(), e);
+    }
     return productQueryService.findById(productId);
   }
 
