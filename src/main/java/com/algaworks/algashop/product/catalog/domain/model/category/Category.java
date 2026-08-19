@@ -1,17 +1,22 @@
 package com.algaworks.algashop.product.catalog.domain.model.category;
 
 import com.algaworks.algashop.product.catalog.domain.model.IdGenerator;
+import java.time.OffsetDateTime;
+import java.util.Objects;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.annotation.*;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.OffsetDateTime;
-import java.util.Objects;
-import java.util.UUID;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "categories")
 @Getter
