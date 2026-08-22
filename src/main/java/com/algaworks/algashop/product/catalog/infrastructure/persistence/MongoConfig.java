@@ -1,4 +1,4 @@
-package com.algaworks.algashop.product.catalog.infrastructure;
+package com.algaworks.algashop.product.catalog.infrastructure.persistence;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
