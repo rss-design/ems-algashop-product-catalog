@@ -21,6 +21,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -30,6 +31,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@CompoundIndex(name = "idx_product_by_category_enabled_salePrice",
+  def = "{'categoryId': 1, 'enabled': 1, 'salePrice': 1}")
+@CompoundIndex(name = "idx_product_by_category_enabled_addedAt",
+  def = "{'categoryId': 1, 'enabled': 1, 'addedAt': -1}")
 public class Product {
 
   @Id
@@ -66,7 +71,6 @@ public class Product {
   @LastModifiedBy
   private UUID lastModifiedByUserId;
 
-  @Indexed(name = "idx_product_by_category")
   @DocumentReference
   @Field(name = "categoryId")
   private Category category;
