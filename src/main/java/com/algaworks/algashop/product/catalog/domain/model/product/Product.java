@@ -21,6 +21,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -37,6 +38,7 @@ public class Product {
 
   private String name;
 
+  @Indexed(name = "idx_product_by_brand")
   private String brand;
 
   private String description;
@@ -64,6 +66,7 @@ public class Product {
   @LastModifiedBy
   private UUID lastModifiedByUserId;
 
+  @Indexed(name = "idx_product_by_category")
   @DocumentReference
   @Field(name = "categoryId")
   private Category category;
