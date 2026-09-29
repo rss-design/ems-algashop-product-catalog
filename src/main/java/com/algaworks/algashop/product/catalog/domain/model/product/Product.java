@@ -31,10 +31,12 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@CompoundIndex(name = "idx_product_by_category_enabled_salePrice",
-  def = "{'categoryId': 1, 'enabled': 1, 'salePrice': 1}")
-@CompoundIndex(name = "idx_product_by_category_enabled_addedAt",
-  def = "{'categoryId': 1, 'enabled': 1, 'addedAt': -1}")
+@CompoundIndex(name = "pidx_product_by_category_enabledTrue_salePrice",
+  def = "{'categoryId': 1, 'salePrice': 1}",
+  partialFilter = "{'enabled':true}")
+@CompoundIndex(name = "pidx_product_by_category_enabledTrue_addedAt",
+  def = "{'categoryId': 1, 'addedAt': -1}",
+  partialFilter = "{'enabled':true}")
 public class Product {
 
   @Id
